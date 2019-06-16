@@ -1,0 +1,6 @@
+# IDE folders to ignore
+.idea/
+
+# project folders to ignore
+node_modules/
+dist/
