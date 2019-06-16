@@ -1,6 +1,9 @@
-# IDE folders to ignore
+# IDE files to ignore
 .idea/
 
-# project folders to ignore
+# npm files to ignore
 node_modules/
+npm-debug.log
+
+# project files to ignore
 dist/
