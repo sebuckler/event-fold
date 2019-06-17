@@ -1,6 +1,6 @@
 type EmittedEvent = {
     name: string;
-    payload: any;
+    payload?: any;
 };
 
 type EventSubscription = {
@@ -12,7 +12,7 @@ type StackedEvent = EmittedEvent & {
     id: number;
 };
 
-type HubEventHandler = (payload: any) => void;
+type HubEventHandler = (payload?: any) => void;
 
 type HubEvent = {
     name: string;
@@ -60,6 +60,10 @@ const addHandlerToHubEvent = (subscription: EventSubscription): void => {
 };
 
 const subscribeToEvent = (subscription: EventSubscription): void => {
+    if (subscription == null || subscription.name == null || subscription.name === "") {
+        throw new Error("Must call subscribeToEvent() with a valid event subscription.");
+    }
+
     getEventFromHub(subscription) != null
         ? addHandlerToHubEvent(subscription)
         : addEventToHub(subscription);
