@@ -62,10 +62,9 @@ const subscribeToEvent = (subscription: EventSubscription) => {
 };
 
 const foldEvent = (name: string): any =>
-    eventStack.filter((event: StackedEvent) => event.name === name)
-        .sort((a: StackedEvent, b: StackedEvent) => a.id - b.id)
-        .reduce((foldedEvent: StackedEvent, currEvent: StackedEvent) =>
-            ({...foldedEvent.payload, ...currEvent.payload}), {} as StackedEvent);
+    eventStack.filter((event) => event.name === name)
+        .sort((prevEvent, currEvent) => prevEvent.id - currEvent.id)
+        .reduce((foldedEvent, currEvent) => ({...foldedEvent.payload, ...currEvent.payload}), {} as StackedEvent);
 
 export {
     EmittedEvent,
