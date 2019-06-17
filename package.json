@@ -1,6 +1,6 @@
 {
   "name": "event-fold",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A lightweight, FP-inspired event sourcing implementation for JavaScript",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
   "main": "dist/index.ts",
   "types": "dist/index.d.ts",
   "files": [
-    "./dist"
+    "dist"
   ],
   "scripts": {
     "lint": "tslint ./src/**/*.ts",
