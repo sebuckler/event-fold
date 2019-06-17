@@ -39,6 +39,10 @@ const callSubscribers = (event: EmittedEvent): void =>
         .forEach((handler) => handler(event.payload));
 
 const emitEvent = (event: EmittedEvent): void => {
+    if (event == null || event.name == null || event.name === "") {
+        throw new Error("Must call emitEvent() with a valid event.");
+    }
+
     stackEvent(event);
     callSubscribers(event);
 };
@@ -55,7 +59,7 @@ const addHandlerToHubEvent = (subscription: EventSubscription): void => {
     eventInHub.handlers = [...eventInHub.handlers, subscription.action];
 };
 
-const subscribeToEvent = (subscription: EventSubscription) => {
+const subscribeToEvent = (subscription: EventSubscription): void => {
     getEventFromHub(subscription) != null
         ? addHandlerToHubEvent(subscription)
         : addEventToHub(subscription);

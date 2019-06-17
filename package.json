@@ -12,7 +12,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "lint": "tslint ./src/**/*.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "mocha --report spec"
   },
   "devDependencies": {
     "chai": "^4.2.0",
