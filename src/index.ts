@@ -70,10 +70,13 @@ const subscribeToEvent = (subscription: EventSubscription): void => {
         : addEventToHub(subscription);
 };
 
-const foldEvent = (name: string): any =>
-    eventStack.filter((event) => event.name === name)
+const foldEvent = (name: string): any => {
+    validateEvent("foldEvent", {name});
+
+    return eventStack.filter((event) => event.name === name)
         .sort((prevEvent, currEvent) => prevEvent.id - currEvent.id)
         .reduce((foldedEvent, currEvent) => ({...foldedEvent.payload, ...currEvent.payload}), {} as StackedEvent);
+};
 
 export {
     EmittedEvent,
