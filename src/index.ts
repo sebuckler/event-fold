@@ -29,6 +29,12 @@ let eventStack = [] as EventStack;
 
 const getNextEventId = (): number => ++nextEventId;
 
+const validateEvent = (fnName: string, event: EmittedEvent | EventSubscription): void => {
+    if (event == null || event.name == null || event.name === "") {
+        throw new Error(`Must call ${fnName}() with a valid event name.`);
+    }
+};
+
 const stackEvent = (event: EmittedEvent): StackedEvent[] =>
     eventStack = [...eventStack, {...event, id: getNextEventId()}];
 
@@ -39,10 +45,7 @@ const callSubscribers = (event: EmittedEvent): void =>
         .forEach((handler) => handler(event.payload));
 
 const emitEvent = (event: EmittedEvent): void => {
-    if (event == null || event.name == null || event.name === "") {
-        throw new Error("Must call emitEvent() with a valid event.");
-    }
-
+    validateEvent("emitEvent", event);
     stackEvent(event);
     callSubscribers(event);
 };
@@ -60,9 +63,7 @@ const addHandlerToHubEvent = (subscription: EventSubscription): void => {
 };
 
 const subscribeToEvent = (subscription: EventSubscription): void => {
-    if (subscription == null || subscription.name == null || subscription.name === "") {
-        throw new Error("Must call subscribeToEvent() with a valid event subscription.");
-    }
+    validateEvent("subscribeToEvent", subscription);
 
     getEventFromHub(subscription) != null
         ? addHandlerToHubEvent(subscription)
