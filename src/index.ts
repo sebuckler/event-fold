@@ -75,7 +75,7 @@ const foldEvent = (name: string): any => {
 
     return eventStack.filter((event) => event.name === name)
         .sort((prevEvent, currEvent) => prevEvent.id - currEvent.id)
-        .reduce((foldedEvent, currEvent) => ({...foldedEvent.payload, ...currEvent.payload}), {} as StackedEvent);
+        .reduce((foldedPayload, currEvent) => ({...foldedPayload, ...currEvent.payload}), {} as StackedEvent);
 };
 
 export {
