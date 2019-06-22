@@ -23,17 +23,16 @@ let nextEventId = Date.now();
 let eventHub = [] as HubEvent[];
 let eventStack = [] as StackedEvent[];
 
-const noop = () => {};
 const isString = (value: any): boolean => typeof value === "string";
 
 const getNextEventId = (): number => ++nextEventId;
 
 const validateEvent = (fnName: string, event: EmittedEvent | EventSubscription): void => {
     event == null || event.name == null || event.name === ""
-        ? (() => {throw new Error(`Must call ${fnName}() with a valid event name.`)})()
+        ? (() => { throw new Error(`Must call ${fnName}() with a valid event name.`); })()
         : !isString(event.name)
-            ? (() => {throw new Error("Event name must be a string.")})()
-            : noop();
+            ? (() => { throw new Error("Event name must be a string."); })()
+            : (() => {})();
 };
 
 const stackEvent = (event: EmittedEvent): StackedEvent[] =>
