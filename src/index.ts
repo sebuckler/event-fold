@@ -35,7 +35,7 @@ const validateEvent = (fnName: string, event: EmittedEvent | EventSubscription):
     }
 };
 
-const stackEvent = (event: EmittedEvent): StackedEvent[] =>
+const stackEvent = (event: EmittedEvent): EventStack =>
     eventStack = [...eventStack, {...event, id: getNextEventId()}];
 
 const callSubscribers = (event: EmittedEvent): void =>

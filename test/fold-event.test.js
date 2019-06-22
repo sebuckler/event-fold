@@ -1,7 +1,8 @@
 "use strict";
 
-let expect = require("chai").expect;
-let {foldEvent, emitEvent} = require("../dist/index");
+const describe = require("mocha").describe;
+const expect = require("chai").expect;
+const {foldEvent, emitEvent} = require("../dist/index");
 
 describe("foldEvent function test", () => {
     it("should throw when no event name is given", () => {
