@@ -1,11 +1,13 @@
 "use strict";
 
-const describe = require("mocha").describe;
+const {describe, beforeEach} = require("mocha");
 const expect = require("chai").expect;
-const emitEvent = require("../dist/index").emitEvent;
+const {clearEventStack, emitEvent} = require("../dist/index");
 
 describe("emitEvent function test", () => {
     const errorMessage = "Must call emitEvent() with a valid event name.";
+
+    beforeEach(() => clearEventStack());
 
     it("should throw when no event is given", () => {
         expect(emitEvent.bind({}, undefined)).to.throw(errorMessage);

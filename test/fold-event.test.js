@@ -1,12 +1,14 @@
 "use strict";
 
-const describe = require("mocha").describe;
+const {describe, beforeEach} = require("mocha");
 const expect = require("chai").expect;
-const {foldEvent, emitEvent} = require("../dist/index");
+const {clearEventStack, foldEvent, emitEvent} = require("../dist/index");
 
 describe("foldEvent function test", () => {
     const errorMessage = "Must call foldEvent() with a valid event name.";
     const expectToBeEmpty = (value) => expect(value).to.be.empty;
+
+    beforeEach(() => clearEventStack());
 
     it("should throw when no event name is given", () => {
         expect(foldEvent.bind({}, undefined)).to.throw(errorMessage);
@@ -42,7 +44,7 @@ describe("foldEvent function test", () => {
         const foldedEvent = foldEvent("event");
 
         expect(foldedEvent.prop).to.equal("val2");
-        expect(foldedEvent.otherProp).to.equal("otherVal2")
+        expect(foldedEvent.otherProp).to.equal("otherVal2");
         expect(foldedEvent.oneMoreProp).to.equal("oneMoreVal");
     })
 });

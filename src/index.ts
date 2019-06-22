@@ -19,24 +19,27 @@ type HubEvent = {
     handlers: HubEventHandler[];
 };
 
-type EventHub = HubEvent[];
-
-type EventStack = StackedEvent[];
-
 let nextEventId = Date.now();
-let eventHub = [] as EventHub;
-let eventStack = [] as EventStack;
+let eventHub = [] as HubEvent[];
+let eventStack = [] as StackedEvent[];
+
+const noop = () => {};
+const isString = (value: any): boolean => typeof value === "string";
 
 const getNextEventId = (): number => ++nextEventId;
 
 const validateEvent = (fnName: string, event: EmittedEvent | EventSubscription): void => {
-    if (event == null || event.name == null || event.name === "") {
-        throw new Error(`Must call ${fnName}() with a valid event name.`);
-    }
+    event == null || event.name == null || event.name === ""
+        ? (() => {throw new Error(`Must call ${fnName}() with a valid event name.`)})()
+        : !isString(event.name)
+            ? (() => {throw new Error("Event name must be a string.")})()
+            : noop();
 };
 
-const stackEvent = (event: EmittedEvent): EventStack =>
+const stackEvent = (event: EmittedEvent): StackedEvent[] =>
     eventStack = [...eventStack, {...event, id: getNextEventId()}];
+
+const clearEventStack = (): StackedEvent[] => eventStack = [];
 
 const callSubscribers = (event: EmittedEvent): void =>
     eventHub.filter((hubEvent) => hubEvent.name === event.name)
@@ -53,7 +56,7 @@ const emitEvent = (event: EmittedEvent): void => {
 const getEventFromHub = (subscription: EventSubscription): HubEvent =>
     eventHub.filter((event) => event.name === subscription.name)[0];
 
-const addEventToHub = (subscription: EventSubscription): EventHub =>
+const addEventToHub = (subscription: EventSubscription): HubEvent[] =>
     eventHub = [...eventHub, {name: subscription.name, handlers: [subscription.action]}];
 
 const addHandlerToHubEvent = (subscription: EventSubscription): void => {
@@ -70,6 +73,18 @@ const subscribeToEvent = (subscription: EventSubscription): void => {
         : addEventToHub(subscription);
 };
 
+const getPublishedEventsByName = (eventName: string): StackedEvent[] => {
+    validateEvent("getPublishedEvents", {name: eventName});
+
+    return eventStack.filter((event) => event.name === eventName)
+        .sort((prevEvent, currEvent) => prevEvent.id - currEvent.id);
+};
+
+const getAllPublishedEvents = (): StackedEvent[] => eventStack;
+
+const getPublishedEvents = (eventName?: string): StackedEvent[] =>
+    eventName != null ? getPublishedEventsByName(eventName) : getAllPublishedEvents();
+
 const foldEvent = (name: string): any => {
     validateEvent("foldEvent", {name});
 
@@ -83,5 +98,7 @@ export {
     EventSubscription,
     emitEvent,
     subscribeToEvent,
-    foldEvent
+    getPublishedEvents,
+    foldEvent,
+    clearEventStack
 };
