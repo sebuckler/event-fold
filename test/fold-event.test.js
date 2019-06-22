@@ -5,23 +5,19 @@ const expect = require("chai").expect;
 const {foldEvent, emitEvent} = require("../dist/index");
 
 describe("foldEvent function test", () => {
+    const errorMessage = "Must call foldEvent() with a valid event name.";
+    const expectToBeEmpty = (value) => expect(value).to.be.empty;
+
     it("should throw when no event name is given", () => {
-        expect(foldEvent.bind({}, undefined))
-            .to
-            .throw("Must call foldEvent() with a valid event name.");
+        expect(foldEvent.bind({}, undefined)).to.throw(errorMessage);
     });
 
     it("should throw when an event with an empty name is given", () => {
-        expect(foldEvent.bind({}, ""))
-            .to
-            .throw("Must call foldEvent() with a valid event name.");
+        expect(foldEvent.bind({}, "")).to.throw(errorMessage);
     });
 
     it("should return an empty object if no events are published", () => {
-        expect(foldEvent("event"))
-            .to
-            .be
-            .empty;
+        expectToBeEmpty(foldEvent("event"));
     });
 
     it("should return the payload of only one event being published", () => {
@@ -29,9 +25,7 @@ describe("foldEvent function test", () => {
 
         emitEvent({name: "event", payload});
 
-        expect(foldEvent("event").prop)
-            .to
-            .equal(payload.prop);
+        expect(foldEvent("event").prop).to.equal(payload.prop);
     });
 
     it("should return a right-associative merge of all published event payloads in order of creation", () => {
@@ -47,16 +41,8 @@ describe("foldEvent function test", () => {
 
         const foldedEvent = foldEvent("event");
 
-        expect(foldedEvent.prop)
-            .to
-            .equal("val2");
-
-        expect(foldedEvent.otherProp)
-            .to
-            .equal("otherVal2");
-
-        expect(foldedEvent.oneMoreProp)
-            .to
-            .equal("oneMoreVal");
+        expect(foldedEvent.prop).to.equal("val2");
+        expect(foldedEvent.otherProp).to.equal("otherVal2")
+        expect(foldedEvent.oneMoreProp).to.equal("oneMoreVal");
     })
 });
