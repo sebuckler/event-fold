@@ -10,6 +10,7 @@ type EventSubscription = {
 
 type StackedEvent = EmittedEvent & {
     id: number;
+    timestamp: string;
 };
 
 type HubEventHandler = (payload?: any) => void;
@@ -19,7 +20,7 @@ type HubEvent = {
     handlers: HubEventHandler[];
 };
 
-let nextEventId = Date.now();
+let nextEventId = 0;
 let eventHub = [] as HubEvent[];
 let eventStack = [] as StackedEvent[];
 
@@ -36,7 +37,7 @@ const validateEvent = (fnName: string, event: EmittedEvent | EventSubscription):
 };
 
 const stackEvent = (event: EmittedEvent): StackedEvent[] =>
-    eventStack = [...eventStack, {...event, id: getNextEventId()}];
+    eventStack = [...eventStack, {...event, id: getNextEventId(), timestamp: new Date().toISOString()}];
 
 const clearEventStack = (): StackedEvent[] => eventStack = [];
 
