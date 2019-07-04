@@ -2,13 +2,13 @@
 
 const {describe, beforeEach} = require("mocha");
 const expect = require("chai").expect;
-const {clearEventStack, foldEvent, emitEvent} = require("../dist/index");
+const {clearEventSnapshots, clearEventStack, foldEvent, emitEvent} = require("../dist/index");
 
 describe("foldEvent function test", () => {
     const errorMessage = "Must call foldEvent() with a valid event name.";
     const expectToBeEmpty = (value) => expect(value).to.be.empty;
 
-    beforeEach(() => clearEventStack());
+    beforeEach(() => {clearEventStack(); clearEventSnapshots();});
 
     it("should throw when no event name is given", () => {
         expect(foldEvent.bind({}, undefined)).to.throw(errorMessage);

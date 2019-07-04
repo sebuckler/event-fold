@@ -2,12 +2,12 @@
 
 const {describe, beforeEach} = require("mocha");
 const expect = require("chai").expect;
-const {clearEventStack, subscribeToEvent, emitEvent} = require("../dist/index");
+const {clearEventSnapshots, clearEventStack, subscribeToEvent, emitEvent} = require("../dist/index");
 
 describe("subscribeToEvent function test", () => {
     const errorMessage = "Must call subscribeToEvent() with a valid event name.";
 
-    beforeEach(() => clearEventStack());
+    beforeEach(() => {clearEventStack(); clearEventSnapshots();});
 
     it("should throw when no event name is given", () => {
         expect(subscribeToEvent.bind({}, undefined)).to.throw(errorMessage);

@@ -2,10 +2,10 @@
 
 const {describe, beforeEach} = require("mocha");
 const expect = require("chai").expect;
-const {clearEventStack, getPublishedEvents, emitEvent} = require("../dist/index");
+const {clearEventSnapshots, clearEventStack, getPublishedEvents, emitEvent} = require("../dist/index");
 
 describe("getPublishedEvents function test", () => {
-    beforeEach(() => clearEventStack());
+    beforeEach(() => {clearEventStack(); clearEventSnapshots();});
 
     it("should throw when provided event name is not a string", () => {
         expect(getPublishedEvents.bind({}, {})).to.throw("Event name must be a string.");
